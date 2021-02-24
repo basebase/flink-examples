@@ -6,7 +6,7 @@ import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.util.Collector;
 
-public class WrodCountBatch {
+public class WordCountBatch {
     public static void main(String[] args) throws Exception {
         // 1. 获取上下文(执行环境), 没有这个是无法执行flink程序的
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
@@ -17,7 +17,7 @@ public class WrodCountBatch {
          *         但是, 我们深入DataSource类可以发现该类继承了Operator类, 而Operator类又继承了DataSet类
          *         所以最本质处理的数据集是一个DataSet所以flink的批处理API被称为DataSet API
          */
-        String inPath = WrodCountBatch.class.getClassLoader().getResource("wordcount").getPath();
+        String inPath = WordCountBatch.class.getClassLoader().getResource("wordcount").getPath();
 
 //        DataSource<String> dataSource = env.readTextFile("");
         DataSet<String> source = env.readTextFile(inPath);
