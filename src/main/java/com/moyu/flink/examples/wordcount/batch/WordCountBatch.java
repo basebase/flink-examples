@@ -16,6 +16,8 @@ public class WordCountBatch {
          *      2. 读取文本数据, 返回了一个DataSource类型, 一个数据源;
          *         但是, 我们深入DataSource类可以发现该类继承了Operator类, 而Operator类又继承了DataSet类
          *         所以最本质处理的数据集是一个DataSet所以flink的批处理API被称为DataSet API
+         *
+         *         一般DataSet处理有限的数据集
          */
         String inPath = WordCountBatch.class.getClassLoader().getResource("wordcount").getPath();
 
