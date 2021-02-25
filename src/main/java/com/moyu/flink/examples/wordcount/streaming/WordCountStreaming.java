@@ -1,5 +1,6 @@
-package com.moyu.flink.examples.wordcount.batch;
+package com.moyu.flink.examples.wordcount.streaming;
 
+import com.moyu.flink.examples.wordcount.batch.WordCountBatch;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
