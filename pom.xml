@@ -35,6 +35,7 @@ under the License.
 		<maven.compiler.source>${target.java.version}</maven.compiler.source>
 		<maven.compiler.target>${target.java.version}</maven.compiler.target>
 		<log4j.version>2.12.1</log4j.version>
+		<mysql.version>8.0.12</mysql.version>
 	</properties>
 
 	<repositories>
@@ -79,6 +80,13 @@ under the License.
 			<groupId>org.apache.flink</groupId>
 			<artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
 			<version>${flink.version}</version>
+		</dependency>
+
+		<!-- mysql驱动依赖 -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.version}</version>
 		</dependency>
 
 		<!-- Add logging framework, to produce console output when running in the IDE. -->
