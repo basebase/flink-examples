@@ -3,18 +3,20 @@ package com.moyu.flink.examples.watermark;
 
 import com.moyu.flink.examples.model.Order;
 import com.moyu.flink.examples.utils.DateUtils;
+import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.AscendingTimestampExtractor;
+import org.apache.flink.streaming.api.functions.AssignerWithPeriodicWatermarks;
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
-import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
+import org.apache.flink.streaming.api.watermark.Watermark;
 import org.apache.flink.streaming.api.windowing.time.Time;
-import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
-import org.apache.flink.util.Collector;
 
+import javax.annotation.Nullable;
 import java.text.ParseException;
-import java.util.Iterator;
+import java.time.Duration;
 
 /***
  *      AssignerWithPeriodicWatermarks程序测试
@@ -24,7 +26,7 @@ public class AssignerWithPeriodicWatermark {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env =
                 StreamExecutionEnvironment.getExecutionEnvironment();
-
+        env.getConfig().setAutoWatermarkInterval(3000);
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 
 
@@ -40,35 +42,69 @@ public class AssignerWithPeriodicWatermark {
 
 
         /***
-         *      核心点, 不过该方法在1.11中已经被废弃了, 在使用idea运行本该运行的window没有被触发计算, 而提交到flink中会触发, 有点奇怪?
+         *
+         *      下面两个设置watermark是1.11之前的设置方式, 新版有其它API实现
          */
+
+        // 在无序的情况下使用, 数据可以等待延迟3s
         orderOperator.assignTimestampsAndWatermarks(new BoundedOutOfOrdernessTimestampExtractor<Order>(Time.seconds(3)) {
             @Override
             public long extractTimestamp(Order element) {
                 try {
-                    long watermark = DateUtils.strToTimestamp(element.getCreatetime());
-                    return watermark;
+                    long createtime = DateUtils.strToTimestamp(element.getCreatetime());
+                    return createtime;
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
 
                 return 0;
             }
-        }).keyBy(order -> order.getId()).timeWindow(Time.seconds(5)).process(new ProcessWindowFunction<Order, String, Integer, TimeWindow>() {
+        });
+
+
+
+        // 在数据有序的情况下使用, 即所有数据都是顺序的, 无需等待
+        orderOperator.assignTimestampsAndWatermarks(new AscendingTimestampExtractor<Order>() {
             @Override
-            public void process(Integer key, Context context, Iterable<Order> elements, Collector<String> out) throws Exception {
-
-                TimeWindow window = context.window();
-                long windowStart = window.getStart();
-                long windowEnd = window.getEnd();
-                System.out.println("=======================windowStart: " + (windowStart) + "~" + " windowEnd: " + windowEnd +  "===========================");
-                Iterator<Order> iterator = elements.iterator();
-                while (iterator.hasNext()) {
-                    out.collect(iterator.next().toString());
+            public long extractAscendingTimestamp(Order element) {
+                try {
+                    long createtime = DateUtils.strToTimestamp(element.getCreatetime());
+                    return createtime;
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
-            }
-        }).print();
 
+                return 0;
+            }
+        });
+
+
+        // 自定义生成方式
+        orderOperator.assignTimestampsAndWatermarks(new AssignerWithPeriodicWatermarks<Order>() {
+
+            private long bound = 3000;      // 3s
+            private long maxTs = Long.MIN_VALUE;    // 最大时间戳
+
+            @Nullable
+            @Override
+            public Watermark getCurrentWatermark() {
+                // 生成一个具有3s延迟的水位线
+                return new Watermark(maxTs - bound);
+            }
+
+            @Override
+            public long extractTimestamp(Order element, long recordTimestamp) {
+                try {
+                    long currentTime = DateUtils.strToTimestamp(element.getCreatetime());
+                    // 更新最大时间戳
+                    maxTs = Math.max(currentTime, maxTs);
+                    return currentTime;
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return 0;
+            }
+        });
 
         env.execute("AssignerWithPeriodicWatermark Test Job");
     }
