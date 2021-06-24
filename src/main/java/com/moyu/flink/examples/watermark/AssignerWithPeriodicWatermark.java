@@ -3,7 +3,6 @@ package com.moyu.flink.examples.watermark;
 
 import com.moyu.flink.examples.model.Order;
 import com.moyu.flink.examples.utils.DateUtils;
-import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -16,7 +15,6 @@ import org.apache.flink.streaming.api.windowing.time.Time;
 
 import javax.annotation.Nullable;
 import java.text.ParseException;
-import java.time.Duration;
 
 /***
  *      AssignerWithPeriodicWatermarks程序测试
@@ -27,6 +25,10 @@ public class AssignerWithPeriodicWatermark {
         StreamExecutionEnvironment env =
                 StreamExecutionEnvironment.getExecutionEnvironment();
         env.getConfig().setAutoWatermarkInterval(3000);
+
+        // 下面的WaterMark如果并行度为3则会创建3个对象
+        env.setParallelism(1);
+
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 
 

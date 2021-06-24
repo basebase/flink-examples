@@ -2,7 +2,6 @@ package com.moyu.flink.examples.watermark;
 
 import com.moyu.flink.examples.model.Order;
 import com.moyu.flink.examples.utils.DateUtils;
-import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.streaming.api.TimeCharacteristic;
@@ -14,7 +13,6 @@ import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
-
 import java.text.ParseException;
 import java.time.Duration;
 import java.util.Iterator;
