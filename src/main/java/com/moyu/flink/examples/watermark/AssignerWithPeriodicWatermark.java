@@ -24,12 +24,15 @@ public class AssignerWithPeriodicWatermark {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env =
                 StreamExecutionEnvironment.getExecutionEnvironment();
-        env.getConfig().setAutoWatermarkInterval(3000);
+
 
         // 下面的WaterMark如果并行度为3则会创建3个对象
         env.setParallelism(1);
 
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
+
+        // 周期生成时间设置在设置时间语义之下, 否则不生效
+        env.getConfig().setAutoWatermarkInterval(5000);
 
 
 
@@ -91,12 +94,14 @@ public class AssignerWithPeriodicWatermark {
             @Override
             public Watermark getCurrentWatermark() {
                 // 生成一个具有3s延迟的水位线
+                System.out.println("getCurrentWatermark: " + System.currentTimeMillis());
                 return new Watermark(maxTs - bound);
             }
 
             @Override
             public long extractTimestamp(Order element, long recordTimestamp) {
                 try {
+                    System.out.println("extractTimestamp: " + System.currentTimeMillis());
                     long currentTime = DateUtils.strToTimestamp(element.getCreatetime());
                     // 更新最大时间戳
                     maxTs = Math.max(currentTime, maxTs);

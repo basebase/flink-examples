@@ -42,6 +42,7 @@ public class AssignerWithPunctuatedWatermark {
             @Override
             public Watermark checkAndGetNextWatermark(Order lastElement, long extractedTimestamp) {
 
+                System.out.println("checkAndGetNextWatermark: " + System.currentTimeMillis());
                 // 只有id为1的数据才生成WaterMark
                 if (lastElement.getId() == 1) {
                     Watermark watermark = new Watermark(extractedTimestamp - 3000);
@@ -53,6 +54,7 @@ public class AssignerWithPunctuatedWatermark {
             @Override
             public long extractTimestamp(Order element, long recordTimestamp) {
                 try {
+                    System.out.println("extractTimestamp: " + System.currentTimeMillis());
                     long createtime = DateUtils.strToTimestamp(element.getCreatetime());
                     return createtime;
                 } catch (ParseException e) {
