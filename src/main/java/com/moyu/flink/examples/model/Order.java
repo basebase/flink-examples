@@ -7,15 +7,15 @@ package com.moyu.flink.examples.model;
 public class Order {
     private Integer id;
     private String goodsName;
-    private Integer stauts;
+    private Integer amount;
     private String createtime;
 
     public Order() { }
 
-    public Order(Integer id, String goodsName, Integer stauts, String createtime) {
+    public Order(Integer id, String goodsName, Integer amount, String createtime) {
         this.id = id;
         this.goodsName = goodsName;
-        this.stauts = stauts;
+        this.amount = amount;
         this.createtime = createtime;
     }
 
@@ -24,7 +24,7 @@ public class Order {
         return "Order{" +
                 "id=" + id +
                 ", goodsName='" + goodsName + '\'' +
-                ", stauts=" + stauts +
+                ", amount=" + amount +
                 ", createtime='" + createtime + '\'' +
                 '}';
     }
@@ -45,12 +45,12 @@ public class Order {
         this.goodsName = goodsName;
     }
 
-    public Integer getStauts() {
-        return stauts;
+    public Integer getAmount() {
+        return amount;
     }
 
-    public void setStauts(Integer stauts) {
-        this.stauts = stauts;
+    public void setAmount(Integer amount) {
+        this.amount = amount;
     }
 
     public String getCreatetime() {
