@@ -101,12 +101,12 @@ under the License.
 
 
 		<!-- flink table & sql依赖 flink版本 -->
-		<!--<dependency>-->
-			<!--<groupId>org.apache.flink</groupId>-->
-			<!--<artifactId>flink-table-planner_${scala.binary.version}</artifactId>-->
-			<!--<version>${flink.version}</version>-->
-			<!--<scope>provided</scope>-->
-		<!--</dependency>-->
+		<dependency>
+			<groupId>org.apache.flink</groupId>
+			<artifactId>flink-table-planner_${scala.binary.version}</artifactId>
+			<version>${flink.version}</version>
+			<scope>provided</scope>
+		</dependency>
 
 
 		<!-- flink table & sql依赖 blink版本 -->

@@ -4,6 +4,7 @@ import com.moyu.flink.examples.model.Student;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.types.Row;
@@ -34,7 +35,12 @@ public class FlinkTableApiQuickStack {
 
 
         // 1. 创建TableEvn环境
-        StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
+        EnvironmentSettings settings = EnvironmentSettings
+                .newInstance()
+                .useBlinkPlanner()
+                .inStreamingMode()
+                .build();
+        StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env, settings);
 
 
         // 2. 将stream转为Table
@@ -52,7 +58,7 @@ public class FlinkTableApiQuickStack {
         tableEnv.createTemporaryView("student", studentTable);
 
         // 2. sql语句
-        String sql = "select name, score from student where score >= 60";
+        String sql = "select count(distinct name) as num from student where score >= 60";
 
         // 3. 执行sql, 返回table
         Table studentSQLTableResult = tableEnv.sqlQuery(sql);
@@ -62,7 +68,8 @@ public class FlinkTableApiQuickStack {
 
         // 5. sql & table两种API结果进行输出
         tableEnv.toAppendStream(studentTableResult, Row.class).print("studentTable");
-        tableEnv.toAppendStream(studentSQLTableResult, Row.class).print("studentSQL");
+//        tableEnv.toAppendStream(studentSQLTableResult, Row.class).print("studentSQL");
+        tableEnv.toRetractStream(studentSQLTableResult, Row.class).print("studentSQL");
 
 
         env.execute("FlinkTableApiQuickStack Test Job");
