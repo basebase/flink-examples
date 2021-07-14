@@ -39,15 +39,25 @@ under the License.
 	</properties>
 
 	<repositories>
+		<!--<repository>-->
+			<!--<id>apache.snapshots</id>-->
+			<!--<name>Apache Development Snapshot Repository</name>-->
+			<!--<url>https://repository.apache.org/content/repositories/snapshots/</url>-->
+			<!--<releases>-->
+				<!--<enabled>false</enabled>-->
+			<!--</releases>-->
+			<!--<snapshots>-->
+				<!--<enabled>true</enabled>-->
+			<!--</snapshots>-->
+		<!--</repository>-->
+
 		<repository>
-			<id>apache.snapshots</id>
-			<name>Apache Development Snapshot Repository</name>
-			<url>https://repository.apache.org/content/repositories/snapshots/</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
+			<id>central</id>
+			<name>Central Repository</name>
+			<url>https://repo.maven.apache.org/maven2</url>
+			<layout>default</layout>
 			<snapshots>
-				<enabled>true</enabled>
+				<enabled>false</enabled>
 			</snapshots>
 		</repository>
 	</repositories>
@@ -89,6 +99,25 @@ under the License.
 			<version>${mysql.version}</version>
 		</dependency>
 
+
+		<!-- flink table & sql依赖 flink版本 -->
+		<!--<dependency>-->
+			<!--<groupId>org.apache.flink</groupId>-->
+			<!--<artifactId>flink-table-planner_${scala.binary.version}</artifactId>-->
+			<!--<version>${flink.version}</version>-->
+			<!--<scope>provided</scope>-->
+		<!--</dependency>-->
+
+
+		<!-- flink table & sql依赖 blink版本 -->
+		<dependency>
+			<groupId>org.apache.flink</groupId>
+			<artifactId>flink-table-planner-blink_${scala.binary.version}</artifactId>
+			<version>${flink.version}</version>
+			<!--<scope>test</scope>-->
+		</dependency>
+
+
 		<!-- Add logging framework, to produce console output when running in the IDE. -->
 		<!-- These dependencies are excluded from the application JAR by default. -->
 		<dependency>
@@ -110,6 +139,7 @@ under the License.
 			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
+
 
 	<build>
 		<plugins>
