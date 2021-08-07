@@ -78,6 +78,6 @@ public class FlinkTableFileSink {
 //        tabEnv.executeSql("insert into student_score_sink select count(distinct id) from source_table");
 
         // 加上这个就会出现异常No operators defined in streaming topology. Cannot execute.
-        env.execute("Flink Table File Sink Test Job");
+//        env.execute("Flink Table File Sink Test Job");
     }
 }
