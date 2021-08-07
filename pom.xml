@@ -132,6 +132,21 @@ under the License.
 			<!--<scope>test</scope>-->
 		</dependency>
 
+		<!-- flink kafka依赖 -->
+		<dependency>
+			<groupId>org.apache.flink</groupId>
+			<artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
+			<version>${flink.version}</version>
+		</dependency>
+
+		<!-- flink json格式化 -->
+		<dependency>
+			<groupId>org.apache.flink</groupId>
+			<artifactId>flink-json</artifactId>
+			<version>${flink.version}</version>
+		</dependency>
+
+
 
 
 
