@@ -1,4 +1,4 @@
-package com.moyu.flink.examples.table;
+package com.moyu.flink.examples.table.base;
 
 import com.moyu.flink.examples.model.Student;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;

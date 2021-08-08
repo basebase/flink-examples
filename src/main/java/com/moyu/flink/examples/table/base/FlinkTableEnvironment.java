@@ -1,4 +1,4 @@
-package com.moyu.flink.examples.table;
+package com.moyu.flink.examples.table.base;
 
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
