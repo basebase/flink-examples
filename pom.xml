@@ -131,13 +131,21 @@ under the License.
 			<version>${flink.version}</version>
 			<!--<scope>test</scope>-->
 		</dependency>
-		
+
 		<!-- flink json格式化 -->
 		<dependency>
 			<groupId>org.apache.flink</groupId>
 			<artifactId>flink-json</artifactId>
 			<version>${flink.version}</version>
 		</dependency>
+
+		<!-- flink jdbc连接器 -->
+		<dependency>
+			<groupId>org.apache.flink</groupId>
+			<artifactId>flink-connector-jdbc_${scala.binary.version}</artifactId>
+			<version>${flink.version}</version>
+		</dependency>
+
 
 
 
